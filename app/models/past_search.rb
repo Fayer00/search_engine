@@ -1,0 +1,2 @@
+class PastSearch < ApplicationRecord
+end
