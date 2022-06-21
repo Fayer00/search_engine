@@ -1,0 +1,30 @@
+services:
+  web:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bin/rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/usr/src/app
+      - bundle:/usr/local/bundle
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - HISTFILE=/usr/src/app/log/.bash_history
+    depends_on:
+      - db
+  db:
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    environment:
+      #- POSTGRES_PASSWORD=changeme
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - DATABASE_URL=postgres://postgres:3x1mpl3@postgres.local:5432/App_production?pool=25&encoding=unicode&schema_search_path=public
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+volumes:
+  pg_data:
+  bundle:
