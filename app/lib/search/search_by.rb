@@ -5,6 +5,7 @@ module Search
       google = @providers.include?('google') ? search_by_google(query) : nil
       bing = @providers.include?('bing') ? search_by_bing(query) : nil
 
+      search_log(query)
       { status: "SUCCESS", google: ,bing: }.compact
     end
 
@@ -17,22 +18,26 @@ module Search
       @providers = providers
     end
 
-    def search_by_google(params)
+    def search_by_google(query)
       GoogleSearch.api_key = ENV['API_KEY']
-      search = GoogleSearch.new(q: params)
+      search = GoogleSearch.new(q: query)
       result = search.get_hash
       return result[:organic_results] unless result.empty?
 
       []
     end
 
-    def search_by_bing(params)
+    def search_by_bing(query)
       BingSearch.api_key = ENV['API_KEY']
-      search = BingSearch.new(q: params)
+      search = BingSearch.new(q: query)
       result = search.get_hash
       return result[:organic_results] unless result.empty?
 
       []
+    end
+    
+    def search_log(query)
+      PastSearch.create(providers: @providers, query:)
     end
   end
 end

@@ -5,6 +5,7 @@
 class SearchesController < ApplicationController
   def index
     @title = "Search Engine"
+    @past_results = PastSearch.last(10).pluck(:providers, :query)
   end
 
   def search

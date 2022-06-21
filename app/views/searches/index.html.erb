@@ -1,4 +1,15 @@
-<h1>Please use /search</h1> <br>
-<h1>Supported params:</h1>
-<h1>providers= add providers separated by a comma</h1>
-<h1>query= this is the search param</h1>
+<h3>Please use /search</h3>
+<h3>Supported params:</h3>
+<h3>providers= add providers separated by a comma, only google and bing supported</h3>
+<h3>query= this is the search param</h3>
+
+<h1>Past Searches</h1>
+<% @past_results.each_with_index do |result, index| %>
+  <li><%= index + 1 %> Search</li>
+  <ul>
+    <li>Providers: <%= result.first %></li>
+    <li>Query: <%= result.last %></li>
+  </ul>
+
+<% end %>
+
