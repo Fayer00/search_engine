@@ -1,11 +1,12 @@
 module Search
   class SearchBy
     def search(query)
-      #cast params as string and search
+      errors = search_log(query)
+      puts errors.inspect
+      return { status: "FAIL" } if errors.errors.any?
       google = @providers.include?('google') ? search_by_google(query) : nil
       bing = @providers.include?('bing') ? search_by_bing(query) : nil
 
-      search_log(query)
       { status: "SUCCESS", google: ,bing: }.compact
     end
 
@@ -14,6 +15,7 @@ module Search
     attr_reader :providers
 
 
+    # @param [String] providers
     def initialize(providers:)
       @providers = providers
     end
@@ -35,9 +37,10 @@ module Search
 
       []
     end
-    
+
     def search_log(query)
-      PastSearch.create(providers: @providers, query:)
+      log = PastSearch.create(providers: @providers, query:)
+      return log if log.errors
     end
   end
 end
