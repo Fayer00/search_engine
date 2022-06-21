@@ -1,13 +1,13 @@
 module Search
   class SearchBy
     def search(query)
-      errors = search_log(query)
-      puts errors.inspect
-      return { status: "FAIL" } if errors.errors.any?
+      log = search_log(query)
+      return { status: 'FAILED', errors: log.errors.messages } if log.errors.any?
+
       google = @providers.include?('google') ? search_by_google(query) : nil
       bing = @providers.include?('bing') ? search_by_bing(query) : nil
 
-      { status: "SUCCESS", google: ,bing: }.compact
+      { status: 'SUCCESS', google: ,bing: }.compact
     end
 
     private

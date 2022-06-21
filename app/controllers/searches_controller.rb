@@ -11,7 +11,8 @@ class SearchesController < ApplicationController
   def search
     new_search = Search::SearchBy.new(providers: params[:providers])
     search_result = new_search.search(params[:query])
-    render json: search_result.to_json, status: :ok
+    status = search_result[:errors].present? ? :bad_request : :ok
+    render json: search_result.to_json, status: status
   end
 
 end
